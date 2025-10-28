@@ -1,101 +1,131 @@
 """
 ==================================================================================================
-Dataset Splitter (YOLOv5)
+YOLOv5 Dataset Preparation Script (with Train/Val/Test Split)
 
 Purpose:
-This script takes a dataset exported from a tool like Label Studio (which doesn't create
-train/val splits) and organises it into the directory structure required by YOLOv5.
-
-How it works:
-1. It reads a list of all image files from a source directory.
-2. It randomly shuffles this list.
-3. It splits the list into training and validation sets based on a defined ratio.
-4. It creates the necessary 'train' and 'val' subdirectories for both images and labels.
-5. It moves each image and corresponding YOLO (.txt) label file to the correct
-   destination folder.
+This script automates the key preparation steps for a robust YOLOv5 workflow:
+1.  **Splitting Data**: It takes a flat directory of images and labels and splits them into
+    'train', 'val', and 'test' sets according to specified ratios.
+2.  **Creating YAML**: It automatically generates the 'dataset.yaml' file required by
+    YOLOv5, populating it with the correct paths, class count, and class names.
 
 Instructions:
-1. Place this script in a 'workspace' directory.
-2. Place your 'images' and 'labels' folders inside the same workspace from Label Studio.
-3. Adjust the configuration variables below (source/output directories and split ratio).
-4. Run the script from your terminal: python split_data.py
+1.  **MUST DO**: Edit the `class_names` list below to match your dataset's classes in the
+    exact order they were defined in your labeling tool.
+2.  **MUST DO**: Adjust the `train_ratio` and `val_ratio`. The remaining percentage will
+    be automatically used for the 'test' set.
+3.  Place this script in a 'workspace' directory.
+4.  Inside the same workspace, place your 'images' and 'labels' folders.
+5.  Run the script from your terminal: python prepare_yolo_dataset.py
 ==================================================================================================
 """
-
 import os
 import random
 import shutil
 
 # --- Configuration ---
+# ❗ EDIT THIS LIST to match your class names in the correct order.
+class_names = ['person', 'car', 'dog']
+
+# ❗ Set the ratios for splitting the data. The rest will be used for the test set.
+train_ratio = 0.7  # 70% of data for training
+val_ratio = 0.2    # 20% of data for validation
+# test_ratio will be automatically calculated as 1.0 - train_ratio - val_ratio (which is 10% in this case)
+
 # Set the paths to your source images and labels folders
 source_images_dir = 'images'
 source_labels_dir = 'labels'
 
 # Set the path for the new dataset directory that will be created
 output_dir = 'final_dataset'
-
-# Set the split ratio for training data (e.g., 0.8 for 80%)
-# The rest will be used for validation.
-train_split_ratio = 0.8
 # ---------------------
 
 
-# Create the necessary output directories
-def create_dirs(base_path):
-    os.makedirs(os.path.join(base_path, 'images/train'), exist_ok=True)
-    os.makedirs(os.path.join(base_path, 'images/val'), exist_ok=True)
-    os.makedirs(os.path.join(base_path, 'labels/train'), exist_ok=True)
-    os.makedirs(os.path.join(base_path, 'labels/val'), exist_ok=True)
+def create_yaml_file(output_dir, class_names_list):
+    """Creates the dataset.yaml file."""
+    nc = len(class_names_list)
+    
+    yaml_content = f"""
+# YOLOv5 dataset configuration file
+# Created by prepare_yolo_dataset.py
+
+# Paths to train/val/test image directories (relative to yolov5/ directory)
+train: ../{output_dir}/images/train/
+val: ../{output_dir}/images/val/
+test: ../{output_dir}/images/test/
+
+# ---
+# Number of classes
+nc: {nc}
+
+# Class names
+names: {class_names_list}
+"""
+    
+    yaml_file_path = os.path.join(output_dir, 'dataset.yaml')
+    with open(yaml_file_path, 'w') as f:
+        f.write(yaml_content)
+        
+    print(f"\n✅ Successfully created {yaml_file_path}")
+    print(f"👉 Your YOLOv5 --data argument should be: {yaml_file_path}")
+
 
 def split_dataset():
-    print(f"Creating output directories at: {output_dir}")
-    create_dirs(output_dir)
+    """Splits the dataset and creates the YAML file."""
+    # Basic validation of inputs
+    if not class_names:
+        print("❌ Error: The 'class_names' list is empty. Please edit the script to add your class names.")
+        return
+    if (train_ratio + val_ratio) >= 1.0:
+        print(f"❌ Error: The sum of train_ratio ({train_ratio}) and val_ratio ({val_ratio}) must be less than 1.0.")
+        return
 
-    # Get a list of all image files (assuming they have common extensions)
-    image_files = [f for f in os.listdir(source_images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
+    print("🚀 Starting dataset preparation...")
     
-    # Shuffle the list of files randomly
+    # Create the necessary output directories
+    for split in ['train', 'val', 'test']:
+        os.makedirs(os.path.join(output_dir, 'images', split), exist_ok=True)
+        os.makedirs(os.path.join(output_dir, 'labels', split), exist_ok=True)
+
+    # Get a list of all image files and shuffle them
+    image_files = [f for f in os.listdir(source_images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
     random.shuffle(image_files)
     
-    # Calculate the split index
-    split_index = int(len(image_files) * train_split_ratio)
+    # Calculate split indices
+    total_files = len(image_files)
+    train_end = int(total_files * train_ratio)
+    val_end = train_end + int(total_files * val_ratio)
     
-    # Divide the files into training and validation sets
-    train_files = image_files[:split_index]
-    val_files = image_files[split_index:]
+    # Divide the files into sets
+    train_files = image_files[:train_end]
+    val_files = image_files[train_end:val_end]
+    test_files = image_files[val_end:]
     
-    print(f"Found {len(image_files)} total images.")
-    print(f"Splitting into {len(train_files)} training images and {len(val_files)} validation images.")
+    print(f"\nFound {total_files} total images. Splitting into:")
+    print(f"  - Training:   {len(train_files)} images")
+    print(f"  - Validation: {len(val_files)} images")
+    print(f"  - Test:       {len(test_files)} images")
 
     # Function to move files
     def move_files(file_list, dest_folder):
         for filename in file_list:
-            # Get the base name of the file without the extension
             base_filename = os.path.splitext(filename)[0]
-            
-            # Construct source and destination paths for the image
-            src_image_path = os.path.join(source_images_dir, filename)
-            dest_image_path = os.path.join(output_dir, 'images', dest_folder, filename)
-            
-            # Construct source and destination paths for the label
-            src_label_path = os.path.join(source_labels_dir, base_filename + '.txt')
-            dest_label_path = os.path.join(output_dir, 'labels', dest_folder, base_filename + '.txt')
+            shutil.move(os.path.join(source_images_dir, filename), os.path.join(output_dir, 'images', dest_folder, filename))
+            label_file = base_filename + '.txt'
+            if os.path.exists(os.path.join(source_labels_dir, label_file)):
+                shutil.move(os.path.join(source_labels_dir, label_file), os.path.join(output_dir, 'labels', dest_folder, label_file))
 
-            # Move the image
-            shutil.move(src_image_path, dest_image_path)
-            
-            # Move the corresponding label file, if it exists
-            if os.path.exists(src_label_path):
-                shutil.move(src_label_path, dest_label_path)
-
-    # Move the files to their respective directories
-    print("\nMoving training files...")
+    # Move the files
+    print("\nMoving files...")
     move_files(train_files, 'train')
-    
-    print("\nMoving validation files...")
     move_files(val_files, 'val')
+    move_files(test_files, 'test')
     
-    print("\nDataset split complete!")
+    # Create the YAML file
+    create_yaml_file(output_dir, class_names)
+    
+    print("\n🎉 Dataset preparation complete!")
+
 
 if __name__ == '__main__':
     split_dataset()
