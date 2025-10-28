@@ -93,6 +93,18 @@ def process_split(split):
                 x1 = min(x0 + TILE_SIZE, w)
                 y1 = min(y0 + TILE_SIZE, h)
                 crop = img[y0:y1, x0:x1]
+
+                # 🧩 Pad to square if smaller on right/bottom edges
+                pad_bottom = TILE_SIZE - crop.shape[0]
+                pad_right = TILE_SIZE - crop.shape[1]
+                if pad_bottom > 0 or pad_right > 0:
+                    crop = cv2.copyMakeBorder(
+                        crop,
+                        0, pad_bottom, 0, pad_right,
+                        borderType=cv2.BORDER_CONSTANT,
+                        value=[0, 0, 0]  # black padding
+                    )
+
                 tile_name = f"{name}_{x0}_{y0}"
                 out_img_path = os.path.join(out_img_dir, f"{tile_name}{IMG_EXT}")
                 cv2.imwrite(out_img_path, crop)
