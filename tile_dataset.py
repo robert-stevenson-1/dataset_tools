@@ -117,7 +117,7 @@ def process_split(split):
                             f.write(" ".join(map(str, b)) + "\n")
 
 if __name__ == "__main__":
-    for split in ["train", "valid", "test"]:
+    for split in ["train", "val", "test"]:
         process_split(split)
 
     print("\n✅ Done! Tiled dataset created at:", OUT_ROOT)
