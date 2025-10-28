@@ -25,7 +25,7 @@ import shutil
 
 # --- Configuration ---
 # ❗ EDIT THIS LIST to match your class names in the correct order.
-class_names = ['person', 'car', 'dog']
+class_names = ['cyst']
 
 # ❗ Set the ratios for splitting the data. The rest will be used for the test set.
 train_ratio = 0.7  # 70% of data for training
@@ -33,11 +33,11 @@ val_ratio = 0.2    # 20% of data for validation
 # test_ratio will be automatically calculated as 1.0 - train_ratio - val_ratio (which is 10% in this case)
 
 # Set the paths to your source images and labels folders
-source_images_dir = 'images'
-source_labels_dir = 'labels'
+source_images_dir = '../images'
+source_labels_dir = '../labels'
 
 # Set the path for the new dataset directory that will be created
-output_dir = 'final_dataset'
+output_dir = '../../final_dataset'
 # ---------------------
 
 
@@ -110,7 +110,7 @@ def split_dataset():
     def move_files(file_list, dest_folder):
         for filename in file_list:
             base_filename = os.path.splitext(filename)[0]
-            shutil.move(os.path.join(source_images_dir, filename), os.path.join(output_dir, 'images', dest_folder, filename))
+            shutil.copy(os.path.join(source_images_dir, filename), os.path.join(output_dir, 'images', dest_folder, filename))
             label_file = base_filename + '.txt'
             if os.path.exists(os.path.join(source_labels_dir, label_file)):
                 shutil.move(os.path.join(source_labels_dir, label_file), os.path.join(output_dir, 'labels', dest_folder, label_file))
