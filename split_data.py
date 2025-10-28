@@ -24,10 +24,10 @@ import random
 import shutil
 
 # --- Configuration ---
-# ❗ EDIT THIS LIST to match your class names in the correct order.
+# EDIT THIS LIST to match your class names in the correct order.
 class_names = ['cyst']
 
-# ❗ Set the ratios for splitting the data. The rest will be used for the test set.
+# Set the ratios for splitting the data. The rest will be used for the test set.
 train_ratio = 0.7  # 70% of data for training
 val_ratio = 0.2    # 20% of data for validation
 # test_ratio will be automatically calculated as 1.0 - train_ratio - val_ratio (which is 10% in this case)
@@ -36,8 +36,8 @@ val_ratio = 0.2    # 20% of data for validation
 source_images_dir = '../images'
 source_labels_dir = '../labels'
 
-# Set the path for the new dataset directory that will be created
-output_dir = '../../final_dataset'
+# Set the path for the new dataset directory that will be created (!update to suit your needs)
+output_dir = '/root/zfs-crow-compute/datasets/PCN/bottle-1/final_dataset'
 # ---------------------
 
 
@@ -107,7 +107,7 @@ def split_dataset():
     print(f"  - Test:       {len(test_files)} images")
 
     # Function to move files
-    def move_files(file_list, dest_folder):
+    def copy_files(file_list, dest_folder):
         for filename in file_list:
             base_filename = os.path.splitext(filename)[0]
             shutil.copy(os.path.join(source_images_dir, filename), os.path.join(output_dir, 'images', dest_folder, filename))
@@ -116,10 +116,10 @@ def split_dataset():
                 shutil.copy(os.path.join(source_labels_dir, label_file), os.path.join(output_dir, 'labels', dest_folder, label_file))
 
     # Move the files
-    print("\nMoving files...")
-    move_files(train_files, 'train')
-    move_files(val_files, 'val')
-    move_files(test_files, 'test')
+    print("\nCopying files...")
+    copy_files(train_files, 'train')
+    copy_files(val_files, 'val')
+    copy_files(test_files, 'test')
     
     # Create the YAML file
     create_yaml_file(output_dir, class_names)
