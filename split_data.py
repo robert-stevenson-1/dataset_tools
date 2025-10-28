@@ -113,7 +113,7 @@ def split_dataset():
             shutil.copy(os.path.join(source_images_dir, filename), os.path.join(output_dir, 'images', dest_folder, filename))
             label_file = base_filename + '.txt'
             if os.path.exists(os.path.join(source_labels_dir, label_file)):
-                shutil.move(os.path.join(source_labels_dir, label_file), os.path.join(output_dir, 'labels', dest_folder, label_file))
+                shutil.copy(os.path.join(source_labels_dir, label_file), os.path.join(output_dir, 'labels', dest_folder, label_file))
 
     # Move the files
     print("\nMoving files...")
