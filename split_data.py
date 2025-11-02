@@ -25,7 +25,7 @@ import shutil
 
 # --- Configuration ---
 # EDIT THIS LIST to match your class names in the correct order.
-class_names = ['cyst']
+class_names = ['PCN_Cyst']
 
 # Set the ratios for splitting the data. The rest will be used for the test set.
 train_ratio = 0.7  # 70% of data for training
@@ -37,7 +37,7 @@ source_images_dir = '../images'
 source_labels_dir = '../labels'
 
 # Set the path for the new dataset directory that will be created (!update to suit your needs)
-output_dir = '/root/zfs-crow-compute/datasets/PCN/bottle-1/final_dataset'
+output_dir = '/root/zfs-crow-compute/datasets/PCN/all-bottles/yolo-all-bottles'
 # ---------------------
 
 
