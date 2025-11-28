@@ -5,8 +5,8 @@ from tqdm import tqdm
 
 # ==== CONFIGURATION ====
 DATA_ROOT = "/root/zfs-crow-compute/datasets/PCN/bottle-1/final_dataset"  # path to your dataset root
-OUT_ROOT = "/root/zfs-crow-compute/datasets/PCN/bottle-1/final_dataset_tiled"  # output dataset root
-TILE_SIZE = 1024  # tile width/height
+OUT_ROOT = "/root/zfs-crow-compute/datasets/PCN/bottle-1/final_dataset_tiled_1280"  # output dataset root
+TILE_SIZE = 1280  # tile width/height
 OVERLAP = 0.2     # fraction (e.g., 0.2 = 20% overlap)
 IMG_EXT = ".jpg"   # or ".png"
 
