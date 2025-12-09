@@ -210,3 +210,4 @@ __marimo__/
 *.zip
 *.json
 uv.lock
+label_studio/B*
