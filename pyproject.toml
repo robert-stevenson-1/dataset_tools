@@ -5,8 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "imagecodecs>=2025.11.11",
     "label-studio-converter>=0.0.59",
     "label-studio-sdk>=2.0.16",
     "requests>=2.32.5",
     "sahi>=0.11.36",
+    "scikit-image>=0.25.2",
 ]
