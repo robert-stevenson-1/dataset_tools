@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "label-studio-converter>=0.0.59",
+    "label-studio-sdk>=2.0.16",
+    "requests>=2.32.5",
+    "sahi>=0.11.36",
+]
