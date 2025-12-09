@@ -6,10 +6,10 @@ from pathlib import Path
 # --- Configuration ---
 
 # 1. Set the path to the directory containing your annotations
-data_root = "/root/zfs-crow-compute/Nematode_Training/src/torch/data/bottles1_2-coco-sliced" 
+data_root = "/root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO-tiled" 
 
 # 2. Set the name of your single, combined COCO file
-original_json_name = "annotations_640_02.json" # This is the default from Label Studio
+original_json_name = "result_2048_02.json" # This is the default from Label Studio
 
 # 3. Set the desired names for your new split files
 train_json_name = f"{original_json_name}-train.json"
@@ -19,7 +19,7 @@ val_json_name = f"{original_json_name}-val.json"
 split_ratio = 0.8
 
 # 5. Set the images directory relative to data_root
-images_dir_name = "annotations_images_640_02"
+images_dir_name = "result_images_2048_02"
 
 # --- End Configuration ---
 

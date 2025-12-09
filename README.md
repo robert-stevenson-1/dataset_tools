@@ -6,8 +6,12 @@ place this repo into the root of your dataset that you will be working on
 # slicing my dataset with sahi
 
 ```sh
-sahi coco slice --image_dir root/zfs-crow-compute/datasets/PCN/all-bottles/PCN_Dish_B1+2_COCO_unsplit/images --dataset_json_path /root/zfs-crow-compute/datasets/PCN/all-bottles/PCN_Dish_B1+2_COCO_unsplit/annotations.json --out_dir ./tiled_dataset --slice_size 2048
+sahi coco slice --image_dir /root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO --dataset_json_path /root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO/result.json --output_dir /root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO-tiled --slice_size 2048
 ```
+
+## train-val split
+
+ use `split_coco.py`, but remember to update the paths and filenames inside
 
 # why this exists
 
