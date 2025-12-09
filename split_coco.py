@@ -12,8 +12,8 @@ data_root = "/root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO-tiled"
 original_json_name = "result_2048_02.json" # This is the default from Label Studio
 
 # 3. Set the desired names for your new split files
-train_json_name = f"{original_json_name}-train.json"
-val_json_name = f"{original_json_name}-val.json"
+train_json_name = f"{original_json_name[:-5]}-train.json"
+val_json_name = f"{original_json_name[:-5]}-val.json"
 
 # 4. Set your desired training/validation split ratio (e.g., 0.8 = 80% train, 20% val)
 split_ratio = 0.8
