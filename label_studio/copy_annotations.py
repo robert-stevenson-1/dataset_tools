@@ -4,9 +4,9 @@ import os
 
 # --- CONFIGURATION ---
 # Change these values to match your filenames and IDs
-INPUT_FILENAME = 'project_27_JSON_export.json'              # Take and enter the file name of the JSON output file from `download_project_annotations.sh`
-OUTPUT_FILENAME = 'project_27_JSON_export_copied.json'      # The new file to create
-SOURCE_ID_TO_COPY = 1173                                    # The ID you want to copy FROM in the input file
+INPUT_FILENAME = 'B1_JSON_export.json'              # Take and enter the file name of the JSON output file from `download_project_annotations.sh`
+OUTPUT_FILENAME = 'B1_JSON_export-copied.json'      # The new file to create
+SOURCE_ID_TO_COPY = 1100                            # The ID you want to copy FROM in the input file
 
 def distribute_annotations(input_file, output_file, source_id):
     """

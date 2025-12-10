@@ -3,7 +3,7 @@
 # Replace YOUR_LABEL_STUDIO_TOKEN_HERE with the actual token you copied.
 LABEL_STUDIO_TOKEN="${LABEL_STUDIO_TOKEN}" 
 EXPORT_FORMAT="JSON"
-PROJECT_ID="27"
+PROJECT_ID="25"
 BASE_URL="http://192.168.1.176:80"
 
 FILE_EXTENSION=".zip"
@@ -12,7 +12,8 @@ if [ "$EXPORT_FORMAT" == "JSON" ]; then
 fi
 
 # Construct the output filename.
-OUTPUT_FILENAME="project_${PROJECT_ID}_${EXPORT_FORMAT}_export${FILE_EXTENSION}"
+# OUTPUT_FILENAME="project_${PROJECT_ID}_${EXPORT_FORMAT}_export${FILE_EXTENSION}"
+OUTPUT_FILENAME="B1_${EXPORT_FORMAT}_export${FILE_EXTENSION}"
 
 # Construct the URL.
 EXPORT_URL="${BASE_URL}/api/projects/${PROJECT_ID}/export?exportType=${EXPORT_FORMAT}&download_all_tasks=true"
