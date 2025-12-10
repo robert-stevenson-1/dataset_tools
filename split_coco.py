@@ -6,10 +6,10 @@ from pathlib import Path
 # --- Configuration ---
 
 # 1. Set the path to the directory containing your annotations
-data_root = "/root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO-tiled" 
+data_root = "/root/zfs-crow-compute/datasets/PCN/v2/B1-8-COCO-2800K-tiled" 
 
 # 2. Set the name of your single, combined COCO file
-original_json_name = "result_640_02.json" # This is the default from Label Studio
+original_json_name = "annotations_2800K_640_02.json" # This is the default from Label Studio
 
 # 3. Set the desired names for your new split files
 train_json_name = f"{original_json_name[:-5]}-train.json"
@@ -19,7 +19,7 @@ val_json_name = f"{original_json_name[:-5]}-val.json"
 split_ratio = 0.8
 
 # 5. Set the images directory relative to data_root
-images_dir_name = "result_images_640_02"
+images_dir_name = "annotations_2800K_images_640_02"
 
 # --- End Configuration ---
 
